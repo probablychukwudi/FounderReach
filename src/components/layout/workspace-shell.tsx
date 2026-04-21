@@ -11,16 +11,16 @@ export function WorkspaceShell({ children }: { children: React.ReactNode }) {
   const showRightRail = !pathname.startsWith("/data");
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white xl:h-screen xl:overflow-hidden">
       <Header />
       <div
         className={cn(
-          "flex flex-col xl:min-h-[calc(100vh-64px)] xl:grid",
+          "flex flex-col xl:h-[calc(100vh-64px)] xl:grid xl:overflow-hidden",
           showRightRail ? "xl:grid-cols-shell" : "xl:grid-cols-[297px_minmax(0,1fr)]",
         )}
       >
         <SidebarLeft />
-        <main className="min-w-0 bg-white">{children}</main>
+        <main className="min-w-0 bg-white xl:h-full xl:overflow-y-auto">{children}</main>
         {showRightRail ? <WorkspaceRightRail pathname={pathname} /> : null}
       </div>
     </div>

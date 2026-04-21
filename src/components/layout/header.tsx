@@ -6,7 +6,7 @@ import { Bell, CalendarDays, ChevronDown, Search } from "lucide-react";
 import { useState } from "react";
 import { FounderReachLogo } from "@/components/brand/founderreach-logo";
 import { useAppStore } from "@/lib/store/useAppStore";
-import { demoProfile, demoSources } from "@/lib/demo-data";
+import { demoSources } from "@/lib/demo-data";
 import type { AgentRun } from "@/types";
 
 export function Header() {
@@ -49,7 +49,9 @@ export function Header() {
   return (
     <header className="sticky top-0 z-30 flex h-header items-center justify-between gap-4 border-b border-[#e9e9e9] bg-white/95 px-4 backdrop-blur-sm lg:px-7">
       <div className="flex min-w-[180px] items-center">
-        <FounderReachLogo compact />
+        <Link href="/dashboard" aria-label="Go to FounderReach dashboard">
+          <FounderReachLogo compact />
+        </Link>
       </div>
 
       <div className="flex min-w-0 flex-1 items-center justify-center">

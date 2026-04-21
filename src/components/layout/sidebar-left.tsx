@@ -9,98 +9,205 @@ import {
   FlaskConical,
   GraduationCap,
   HelpCircle,
+  Link2,
+  Plus,
   Settings2,
   UserRoundSearch,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { demoInstitutions, demoSources } from "@/lib/demo-data";
-import { cn } from "@/lib/utils";
+import { useAppStore } from "@/lib/store/useAppStore";
+import { cn, formatScore } from "@/lib/utils";
+import type { InstitutionStage, SourcePlatform } from "@/types";
 
-const platformIcons = {
+const platformIcons: Record<SourcePlatform, React.ComponentType<{ className?: string }>> = {
   google_scholar: GraduationCap,
   researchgate: FlaskConical,
   nsf: Building2,
   nih: Beaker,
   academia: FilePlus2,
   linkedin: BriefcaseBusiness,
+  custom: Link2,
+};
+
+const stageStyles: Record<InstitutionStage, string> = {
+  matched: "bg-[#f0f0ec] text-ink-3",
+  qualified: "bg-green-soft text-green",
+  outreach_drafted: "bg-[#fff4df] text-[#8b5a00]",
+  outreach_sent: "bg-green-soft text-green",
+  booked: "bg-green-soft text-green",
+};
+
+const stageLabels: Record<InstitutionStage, string> = {
+  matched: "Matched",
+  qualified: "Qualified",
+  outreach_drafted: "Drafted",
+  outreach_sent: "Sent",
+  booked: "Booked",
 };
 
 export function SidebarLeft() {
   const pathname = usePathname();
+  const sources = useAppStore((state) => state.sources);
+  const institutions = useAppStore((state) => state.institutions);
+  const selectedInstitutionId = useAppStore((state) => state.selectedInstitutionId);
+  const toggleSource = useAppStore((state) => state.toggleSource);
+  const addSource = useAppStore((state) => state.addSource);
+  const addInstitution = useAppStore((state) => state.addInstitution);
+  const setSelectedInstitutionId = useAppStore((state) => state.setSelectedInstitutionId);
 
   return (
-    <aside className="border-r border-[#dadada] bg-surface px-4 py-6 xl:min-h-[calc(100vh-64px)] xl:overflow-y-auto">
-      <div className="mx-auto flex h-full max-w-[257px] flex-col">
-        <section className="pb-4">
-          <h2 className="font-display text-[14px] font-bold text-ink">Sources &amp; Data</h2>
-          <div className="px-2 pt-4">
-            <div className="text-[10px] font-bold uppercase tracking-[0.05em] text-ink-2">Active Platforms</div>
-          </div>
-          <div className="mt-2 space-y-1">
-            {demoSources.map((source) => {
-              const Icon = platformIcons[source.platform] ?? UserRoundSearch;
-              return (
-                <div key={source.id} className="flex items-center gap-2 rounded-[6px] px-2 py-1.5">
-                  <Icon className="h-3.5 w-3.5 text-ink-2" />
-                  <span className="min-w-0 flex-1 text-xs font-medium text-ink">{source.label}</span>
-                  <span className={cn("h-1.5 w-1.5 rounded-full", source.active ? "bg-green-dot" : "bg-[#c6c6c6]")} />
-                </div>
-              );
-            })}
-          </div>
-          <Link
-            href="/permissions"
-            className="mt-2 flex items-center gap-2 rounded-[6px] border border-dashed border-[rgba(3,3,3,0.3)] px-3 py-2 text-xs font-medium text-ink-2"
-          >
-            <FilePlus2 className="h-3.5 w-3.5" />
-            Add source...
-          </Link>
-        </section>
+    <aside className="border-r border-[#dadada] bg-surface px-4 py-5 xl:h-full xl:overflow-hidden xl:px-5">
+      <div className="mx-auto flex h-full max-w-[257px] flex-col gap-4">
+        <div className="shrink-0 px-1">
+          <div className="text-[14px] font-bold text-ink">Sources &amp; Data</div>
+          <p className="mt-2 text-[12px] leading-[18px] text-ink-2">
+            Start with a live research stack, then add custom sources and institutions as the pipeline expands.
+          </p>
+        </div>
 
-        <div className="flex-1" />
-
-        <section className="border-t border-[#dadada] pt-6">
-          <div className="flex items-center justify-between">
-            <div className="text-xs font-semibold uppercase tracking-[0.02em] text-ink-2">Institution List</div>
-            <Link href="/data" className="text-[11px] font-semibold text-green">
-              Edit
-            </Link>
-          </div>
-          <div className="mt-3 space-y-3">
-            {demoInstitutions.map((institution) => (
-              <Link
-                key={institution.id}
-                href="/data"
-                className={cn(
-                  "block rounded-[6px] border border-[rgba(188,202,187,0.1)] bg-white px-[13px] py-[13px] shadow-[0px_1px_2px_rgba(0,0,0,0.05)]",
-                  pathname.startsWith("/data") && institution.name === "MIT Media Lab" && "border-l-[3px] border-l-green",
-                )}
+        <section className="min-h-0 shrink-0 rounded-[18px] border border-black/5 bg-[#f4efe8] shadow-[0px_8px_30px_rgba(15,19,17,0.06)] xl:basis-[42%]">
+          <div className="flex h-full flex-col overflow-hidden">
+            <div className="flex items-center justify-between border-b border-black/5 px-4 py-3">
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-2">Active Platforms</div>
+                <div className="mt-1 text-[11px] text-ink-3">Toggle what TinyFish scans by default.</div>
+              </div>
+              <button
+                type="button"
+                onClick={addSource}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-[8px] bg-white text-ink shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition hover:bg-[#fafafa]"
+                aria-label="Add source"
               >
-                <div className="text-xs font-bold text-ink">{institution.name}</div>
-                <div className="mt-1 flex items-center justify-between gap-3">
-                  <span className="text-[11px] text-ink-2">{institution.type.replaceAll("_", " ").replace(/\b\w/g, (char) => char.toUpperCase())}</span>
-                  <span className="rounded-[4px] bg-surface px-1.5 py-0.5 text-[10px] text-ink-3">{institution.focus}</span>
-                </div>
-              </Link>
-            ))}
+                <Plus className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="scrollbar-none flex-1 space-y-2 overflow-y-auto px-3 py-3">
+              {sources.map((source) => {
+                const Icon = platformIcons[source.platform] ?? UserRoundSearch;
+                return (
+                  <button
+                    key={source.id}
+                    type="button"
+                    onClick={() => toggleSource(source.id)}
+                    className={cn(
+                      "w-full rounded-[14px] border px-3 py-3 text-left transition",
+                      source.active
+                        ? "border-[rgba(0,109,54,0.18)] bg-white shadow-[0px_2px_8px_rgba(15,19,17,0.05)]"
+                        : "border-transparent bg-white/55 hover:bg-white",
+                    )}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={cn(
+                          "mt-0.5 flex h-9 w-9 items-center justify-center rounded-[10px]",
+                          source.active ? "bg-[rgba(74,222,128,0.16)] text-green" : "bg-[#ece8e0] text-ink-2",
+                        )}
+                      >
+                        <Icon className="h-4 w-4" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <div className="truncate text-[13px] font-semibold text-ink">{source.label}</div>
+                            <div className="mt-0.5 text-[11px] leading-[16px] text-ink-2">{source.subtitle}</div>
+                          </div>
+                          <span
+                            className={cn(
+                              "flex h-5 w-9 shrink-0 items-center rounded-full p-0.5 transition",
+                              source.active ? "bg-green" : "bg-[#d4d4d1]",
+                            )}
+                          >
+                            <span
+                              className={cn(
+                                "h-4 w-4 rounded-full bg-white transition",
+                                source.active ? "translate-x-4" : "",
+                              )}
+                            />
+                          </span>
+                        </div>
+                        <div className="mt-2 text-[11px] leading-[16px] text-ink-3">{source.useCase}</div>
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <Link
-            href="/permissions"
-            className="mt-3 flex items-center gap-2 rounded-[6px] border border-dashed border-[rgba(3,3,3,0.3)] px-3 py-2 text-xs font-medium text-ink-2"
-          >
-            <FilePlus2 className="h-3.5 w-3.5" />
-            Add source...
-          </Link>
         </section>
 
-        <div className="mt-6 border-t border-[#dadada] pt-4">
-          <div className="space-y-2">
-            <Link href="/profile" className="flex items-center gap-2 py-2 text-sm text-ink-2">
-              <Settings2 className="h-5 w-5" />
+        <section className="min-h-0 flex-1 rounded-[18px] border border-black/5 bg-[#f4efe8] shadow-[0px_8px_30px_rgba(15,19,17,0.06)]">
+          <div className="flex h-full flex-col overflow-hidden">
+            <div className="flex items-center justify-between border-b border-black/5 px-4 py-3">
+              <div>
+                <div className="text-[11px] font-bold uppercase tracking-[0.08em] text-ink-2">Institution List</div>
+                <div className="mt-1 text-[11px] text-ink-3">Click any target to edit the research record.</div>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={addInstitution}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-[8px] bg-white text-ink shadow-[0px_1px_2px_rgba(0,0,0,0.05)] transition hover:bg-[#fafafa]"
+                  aria-label="Add institution"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+                <Link href="/data" className="text-[11px] font-semibold text-green">
+                  Edit
+                </Link>
+              </div>
+            </div>
+
+            <div className="scrollbar-none flex-1 space-y-3 overflow-y-auto px-3 py-3">
+              {institutions.map((institution) => (
+                <Link
+                  key={institution.id}
+                  href="/data"
+                  onClick={() => setSelectedInstitutionId(institution.id)}
+                  className={cn(
+                    "block rounded-[14px] border px-3 py-3 transition",
+                    selectedInstitutionId === institution.id || (pathname.startsWith("/data") && selectedInstitutionId === institution.id)
+                      ? "border-[rgba(0,109,54,0.18)] bg-white shadow-[0px_2px_8px_rgba(15,19,17,0.06)]"
+                      : "border-transparent bg-white/70 hover:bg-white",
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <div className="truncate text-[13px] font-semibold text-ink">{institution.name}</div>
+                      <div className="mt-1 text-[11px] leading-[16px] text-ink-2">{institution.description}</div>
+                    </div>
+                    <span className={cn("shrink-0 rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.06em]", stageStyles[institution.stage])}>
+                      {stageLabels[institution.stage]}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between gap-3">
+                    <div className="flex flex-wrap gap-2">
+                      <span className="rounded-[6px] bg-[#ebe7de] px-2 py-1 text-[10px] uppercase tracking-[0.06em] text-ink-3">
+                        {institution.focus}
+                      </span>
+                      <span className="rounded-[6px] bg-[#ebe7de] px-2 py-1 text-[10px] uppercase tracking-[0.06em] text-ink-3">
+                        {formatScore(institution.relevanceScore)}
+                      </span>
+                    </div>
+                    <span className="text-[10px] uppercase tracking-[0.06em] text-ink-3">
+                      {institution.type.replaceAll("_", " ")}
+                    </span>
+                  </div>
+                  <div className="mt-2 text-[11px] text-ink-3">{institution.lastActivity}</div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-auto shrink-0 rounded-[16px] border border-black/5 bg-white px-3 py-2 shadow-[0px_4px_18px_rgba(15,19,17,0.05)]">
+          <div className="space-y-1">
+            <Link href="/profile" className="flex items-center gap-2 rounded-[10px] px-2 py-2 text-sm text-ink-2 transition hover:bg-surface">
+              <Settings2 className="h-4 w-4" />
               Settings
             </Link>
-            <Link href="/permissions" className="flex items-center gap-2 py-2 text-sm text-ink-2">
-              <HelpCircle className="h-5 w-5" />
+            <Link href="/permissions" className="flex items-center gap-2 rounded-[10px] px-2 py-2 text-sm text-ink-2 transition hover:bg-surface">
+              <HelpCircle className="h-4 w-4" />
               Help
             </Link>
           </div>

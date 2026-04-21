@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FounderReachLogo } from "@/components/brand/founderreach-logo";
+import { LandingDemoTrigger } from "@/components/sections/landing-demo-trigger";
 
 const pipelineSteps = [
   {
@@ -72,6 +73,7 @@ export function LandingPage() {
             <a href="#resources">Resources</a>
           </nav>
           <div className="flex items-center gap-4 lg:gap-5">
+            <LandingDemoTrigger className="hidden lg:inline-flex" />
             <Link href="/login" className="hidden text-base font-medium tracking-[-0.025em] text-ink-2 lg:block">
               Sign In
             </Link>
@@ -113,12 +115,11 @@ export function LandingPage() {
                 >
                   Start Building Agents
                 </Link>
-                <Link
-                  href="/dashboard"
-                  className="rounded-[8px] bg-[#e2e2e2] px-8 py-4 text-[18px] font-bold text-green"
-                >
-                  View Demo
-                </Link>
+                <LandingDemoTrigger
+                  label="Watch Demo"
+                  className="rounded-[8px] border-0 bg-[#e2e2e2] px-8 py-4 text-[18px] font-bold text-green hover:border-transparent hover:bg-[#d8d8d8]"
+                  iconClassName="h-[18px] w-[18px]"
+                />
               </div>
 
               <div className="w-full max-w-[475px] self-end shadow-[-12px_15px_9.7px_rgba(0,0,0,0.25)]">

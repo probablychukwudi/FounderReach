@@ -6,7 +6,8 @@ export type SourcePlatform =
   | "nsf"
   | "nih"
   | "academia"
-  | "linkedin";
+  | "linkedin"
+  | "custom";
 
 export type InstitutionStage =
   | "matched"
