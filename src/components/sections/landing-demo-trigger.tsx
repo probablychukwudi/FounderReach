@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { Play, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -16,6 +17,11 @@ export function LandingDemoTrigger({
   iconClassName,
 }: LandingDemoTriggerProps) {
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -37,6 +43,48 @@ export function LandingDemoTrigger({
     };
   }, [open]);
 
+  const modal =
+    mounted && open
+      ? createPortal(
+          <div className="fixed inset-0 z-[999] flex items-center justify-center overflow-y-auto bg-[#0f1311]/80 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6">
+            <div className="absolute inset-0" onClick={() => setOpen(false)} aria-hidden="true" />
+            <div className="relative z-[1] my-auto w-full max-w-[1120px] max-h-[calc(100vh-2rem)] overflow-hidden rounded-[24px] border border-white/10 bg-[#0f1311] shadow-[0_24px_80px_rgba(0,0,0,0.45)] sm:max-h-[calc(100vh-3rem)]">
+              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
+                <div>
+                  <div className="text-sm font-semibold tracking-[0.08em] text-[#4ade80]">FounderReach Demo</div>
+                  <div className="mt-1 text-sm text-white/70">
+                    Watch the product workflow from match to booked meeting.
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                  aria-label="Close demo"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="max-h-[calc(100vh-8rem)] overflow-y-auto bg-[#0b0f0d] p-3 sm:max-h-[calc(100vh-9rem)] sm:p-5">
+                <video
+                  key={open ? "founderreach-demo-open" : "founderreach-demo-closed"}
+                  className="aspect-video w-full rounded-[18px] bg-black object-cover"
+                  controls
+                  autoPlay
+                  playsInline
+                  preload="metadata"
+                  poster="/assets/demo/founderreach-demo-poster.jpg"
+                >
+                  <source src="/assets/demo/founderreach-demo.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>,
+          document.body,
+        )
+      : null;
+
   return (
     <>
       <button
@@ -50,44 +98,7 @@ export function LandingDemoTrigger({
         <Play className={cn("h-4 w-4 fill-current", iconClassName)} />
         <span>{label}</span>
       </button>
-
-      {open ? (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto bg-[#0f1311]/80 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6">
-          <div className="absolute inset-0" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className="relative z-[1] my-auto w-full max-w-[1120px] overflow-hidden rounded-[24px] border border-white/10 bg-[#0f1311] shadow-[0_24px_80px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
-              <div>
-                <div className="text-sm font-semibold tracking-[0.08em] text-[#4ade80]">FounderReach Demo</div>
-                <div className="mt-1 text-sm text-white/70">
-                  Watch the product workflow from match to booked meeting.
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
-                aria-label="Close demo"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-
-            <div className="overflow-y-auto bg-[#0b0f0d] p-3 sm:p-5 max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-9rem)]">
-              <video
-                key={open ? "founderreach-demo-open" : "founderreach-demo-closed"}
-                className="aspect-video w-full rounded-[18px] bg-black object-cover"
-                controls
-                autoPlay
-                playsInline
-                preload="metadata"
-                poster="/assets/demo/founderreach-demo-poster.jpg"
-              >
-                <source src="/assets/demo/founderreach-demo.mp4" type="video/mp4" />
-              </video>
-            </div>
-          </div>
-        </div>
-      ) : null}
+      {modal}
     </>
   );
 }
