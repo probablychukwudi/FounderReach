@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   title: "FounderReach",
   description:
     "FounderReach is an autonomous startup partnership intelligence platform for matching, qualifying, and activating high-fit institutions.",
+  icons: {
+    icon: "/assets/brand/founderreach-logo-mark.svg",
+    shortcut: "/assets/brand/founderreach-logo-mark.svg",
+    apple: "/assets/brand/founderreach-logo-mark.svg",
+  },
 };
 
 export default function RootLayout({

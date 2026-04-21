@@ -15,7 +15,7 @@ export function FounderReachLogo({
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
       <Image
-        src="/assets/brand/founderreach-logo-mark.png"
+        src="/assets/brand/founderreach-logo-mark.svg"
         alt="FounderReach"
         width={compact ? 29 : 48}
         height={compact ? 31 : 52}

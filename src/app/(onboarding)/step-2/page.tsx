@@ -35,7 +35,7 @@ export default function StepTwoPage() {
     <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12">
       <div className="w-full max-w-[472px] rounded-[12px] bg-white px-8 py-8 shadow-[0px_20px_60px_rgba(26,28,28,0.08)]">
         <div className="mx-auto flex w-fit items-center gap-2">
-          <Image src="/assets/brand/founderreach-logo-mark.png" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
+          <Image src="/assets/brand/founderreach-logo-mark.svg" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
           <div className="text-[20px] font-black tracking-[-0.05em] text-ink">FounderReach</div>
         </div>
 

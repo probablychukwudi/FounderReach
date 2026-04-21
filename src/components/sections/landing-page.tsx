@@ -88,7 +88,7 @@ export function LandingPage() {
       <section className="mx-auto max-w-[1280px] px-4 pb-7 pt-24 lg:px-8">
         <div className="mx-auto flex max-w-[1152px] flex-col gap-12">
           <Image
-            src="/assets/brand/founderreach-logo-mark.png"
+            src="/assets/brand/founderreach-logo-mark.svg"
             alt="FounderReach mark"
             width={102}
             height={109}

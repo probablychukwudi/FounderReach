@@ -29,7 +29,7 @@ export default function StepOnePage() {
     <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12">
       <div className="w-full max-w-[420px] text-center">
         <div className="mx-auto flex w-fit items-center gap-2">
-          <Image src="/assets/brand/founderreach-logo-mark.png" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
+          <Image src="/assets/brand/founderreach-logo-mark.svg" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
           <div className="text-[20px] font-black tracking-[-0.05em] text-ink">FounderReach</div>
         </div>
         <div className="mt-3 text-base text-ink-2">Set up your workspace</div>
