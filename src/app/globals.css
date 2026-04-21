@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #eeeeee;
+  --foreground: #1a1c1c;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(188, 202, 187, 0.35), transparent 32%),
+    linear-gradient(180deg, #f6f6f3 0%, #eeeeee 42%, #e4e6df 100%);
+  color: var(--foreground);
+  font-family: var(--font-roboto), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(74, 222, 128, 0.32);
+}
+
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-inter), sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+@layer components {
+  .surface-card {
+    @apply rounded-shell border border-black/5 bg-white/85 shadow-card backdrop-blur-sm;
+  }
+
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.22em] text-ink-3;
+  }
+}
