@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+import { readFileSync } from "node:fs";
+import path from "node:path";
 
 export const size = {
   width: 64,
@@ -8,6 +10,10 @@ export const size = {
 export const contentType = "image/png";
 
 export default function Icon() {
+  const icon = readFileSync(
+    path.join(process.cwd(), "public/assets/brand/founderreach-logo-mark.png"),
+  ).toString("base64");
+
   return new ImageResponse(
     (
       <div
@@ -17,19 +23,16 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #2d4e68, #599bce)",
-          borderRadius: 18,
-          position: "relative",
+          background: "#ffffff",
         }}
       >
-        <div
-          style={{
-            width: 26,
-            height: 26,
-            borderRadius: 999,
-            background: "#4ade80",
-            boxShadow: "0 0 20px rgba(74, 222, 128, 0.7)",
-          }}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={`data:image/png;base64,${icon}`}
+          alt="FounderReach"
+          width={54}
+          height={58}
+          style={{ objectFit: "contain" }}
         />
       </div>
     ),

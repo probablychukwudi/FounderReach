@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #eeeeee;
+  --background: #f3f3f4;
   --foreground: #1a1c1c;
 }
 
@@ -17,11 +17,9 @@ html {
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(188, 202, 187, 0.35), transparent 32%),
-    linear-gradient(180deg, #f6f6f3 0%, #eeeeee 42%, #e4e6df 100%);
+  background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-roboto), sans-serif;
+  font-family: var(--font-inter), sans-serif;
 }
 
 a {
@@ -45,6 +43,12 @@ a {
   p {
     margin: 0;
   }
+
+  input,
+  textarea,
+  button {
+    font: inherit;
+  }
 }
 
 @layer components {
@@ -54,5 +58,16 @@ a {
 
   .eyebrow {
     @apply font-mono text-[11px] uppercase tracking-[0.22em] text-ink-3;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }

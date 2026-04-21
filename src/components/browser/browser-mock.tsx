@@ -1,41 +1,38 @@
 import { Globe } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export function BrowserMock({
   url,
-  title,
-  body,
+  compact = false,
 }: {
   url: string;
-  title: string;
-  body: string;
+  compact?: boolean;
 }) {
   return (
-    <Card className="overflow-hidden rounded-[20px] bg-white/90">
-      <div className="flex items-center gap-2 border-b border-black/5 px-4 py-3">
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-400" />
-          <span className="h-2.5 w-2.5 rounded-full bg-green-dot" />
-        </div>
-        <div className="flex min-w-0 items-center gap-2 rounded-full bg-surface px-3 py-1 text-xs text-ink-3">
-          <Globe className="h-3.5 w-3.5" />
-          <span className="truncate">{url}</span>
-        </div>
-      </div>
-      <div className="space-y-3 px-4 py-4">
-        <div className="h-28 rounded-[18px] bg-gradient-to-br from-grad-top to-grad-bot p-4 text-white">
-          <div className="eyebrow !text-white/70">Live TinyFish Browser Run</div>
-          <div className="mt-4 max-w-[180px] font-display text-xl font-bold leading-tight">
-            {title}
+    <div className={cn("w-full rounded-[4px] border border-[rgba(188,202,187,0.2)] bg-surface p-[0.5px]", compact && "rounded-[3px]")}>
+      <div className="overflow-hidden rounded-[4px] bg-white">
+        <div className="flex h-3 items-center gap-[3px] border-b border-[rgba(188,202,187,0.2)] bg-[#dadada] px-[6px]">
+          <span className="h-[5px] w-[5px] rounded-full bg-[#ff5f56]" />
+          <span className="h-[5px] w-[5px] rounded-full bg-[#ffbd2e]" />
+          <span className="h-[5px] w-[5px] rounded-full bg-[#27c93f]" />
+          <div className="min-w-0 flex-1 pl-1">
+            <div className="flex h-[8px] items-center justify-center rounded-[2px] bg-white px-1 text-[5px] text-ink-2">
+              <Globe className="mr-1 h-[4px] w-[4px]" />
+              <span className="truncate">{url}</span>
+            </div>
           </div>
         </div>
-        <div className="space-y-2 text-sm leading-6 text-ink-2">
-          <div className="h-2 rounded-full bg-surface-2" />
-          <div className="h-2 w-4/5 rounded-full bg-surface-2" />
-          <p>{body}</p>
+        <div className={cn("relative h-24 bg-white", compact && "h-16")}>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[rgba(243,243,244,0.5)]" />
+          <div className="absolute inset-x-0 bottom-0 top-1/2 border-t border-[rgba(188,202,187,0.2)] bg-white/70 backdrop-blur-[3px]">
+            <div className={cn("space-y-1 px-2 py-2", compact && "space-y-0.5 px-1.5 py-1.5")}>
+              <div className="h-1 rounded-full bg-surface-2" />
+              <div className="h-1 w-2/3 rounded-full bg-surface-2" />
+              <div className="h-1 w-4/5 rounded-full bg-surface-2" />
+            </div>
+          </div>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
