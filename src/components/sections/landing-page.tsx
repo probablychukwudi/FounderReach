@@ -127,6 +127,7 @@ export function LandingPage() {
                   alt="FounderReach dashboard preview"
                   width={475}
                   height={338}
+                  unoptimized
                   className="h-auto w-full"
                 />
               </div>
