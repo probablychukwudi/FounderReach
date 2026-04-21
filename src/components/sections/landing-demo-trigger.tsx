@@ -52,9 +52,9 @@ export function LandingDemoTrigger({
       </button>
 
       {open ? (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-[#0f1311]/80 px-4 py-8 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-y-auto bg-[#0f1311]/80 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6">
           <div className="absolute inset-0" onClick={() => setOpen(false)} aria-hidden="true" />
-          <div className="relative z-[1] w-full max-w-[1120px] overflow-hidden rounded-[24px] border border-white/10 bg-[#0f1311] shadow-[0_24px_80px_rgba(0,0,0,0.45)]">
+          <div className="relative z-[1] my-auto w-full max-w-[1120px] overflow-hidden rounded-[24px] border border-white/10 bg-[#0f1311] shadow-[0_24px_80px_rgba(0,0,0,0.45)] max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 text-white">
               <div>
                 <div className="text-sm font-semibold tracking-[0.08em] text-[#4ade80]">FounderReach Demo</div>
@@ -72,7 +72,7 @@ export function LandingDemoTrigger({
               </button>
             </div>
 
-            <div className="bg-[#0b0f0d] p-3 sm:p-5">
+            <div className="overflow-y-auto bg-[#0b0f0d] p-3 sm:p-5 max-h-[calc(100vh-8rem)] sm:max-h-[calc(100vh-9rem)]">
               <video
                 key={open ? "founderreach-demo-open" : "founderreach-demo-closed"}
                 className="aspect-video w-full rounded-[18px] bg-black object-cover"
