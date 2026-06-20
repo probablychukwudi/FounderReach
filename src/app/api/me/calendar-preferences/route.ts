@@ -20,7 +20,7 @@ const defaultPreferences: CalendarPreferences = {
 };
 
 async function getSessionUser() {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
 
   if (!supabase) {
     return {

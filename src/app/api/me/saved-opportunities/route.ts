@@ -9,7 +9,7 @@ const savedOpportunitiesSchema = z.object({
 });
 
 async function getSessionUser() {
-  const supabase = getSupabaseServerClient();
+  const supabase = await getSupabaseServerClient();
 
   if (!supabase) {
     return {

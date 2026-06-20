@@ -1,88 +1,147 @@
 # FounderReach
 
-FounderReach is a production rebuild of the platform as a Netlify-native Next.js application. It is designed around a TinyFish-first agent workflow for startup partnership intelligence:
+FounderReach is a founder opportunity radar for discovering and organizing startup opportunities in one workspace. It tracks hackathons, accelerators, events, competitions, funding, startup credits, fellowships, launch channels, mentors, talent, investor networks, forums, and market-signal sources.
 
-1. `Match` scans live browser sources for institutions, grants, labs, and investors.
-2. `Qualify` ranks the targets by fit, funding recency, and commercialization potential.
-3. `Outreach` drafts specific founder messaging grounded in current source evidence.
-4. `Book` moves warm paths into scheduling and calendar coordination.
+The app is built as a portfolio-grade Next.js product: a clean left-sidebar workspace, searchable opportunity feed, calendar view, guest mode, passwordless email access, newsletter signup, saved opportunities, analytics, and sync-ready provider integrations.
 
-## Stack
+**Live site:** [founderreach.app](https://founderreach.app)
 
-- Next.js 14 App Router + TypeScript
+## Screenshots
+
+![FounderReach opportunity dashboard](docs/screenshots/dashboard.png)
+
+![FounderReach calendar view](docs/screenshots/calendar.png)
+
+![FounderReach profile and newsletter view](docs/screenshots/profile.png)
+
+## What It Does
+
+- Surfaces founder-relevant opportunities across hackathons, accelerators, grants, credits, events, launch channels, talent, mentors, investor networks, forums, and news.
+- Organizes opportunities by category, format, access type, deadline, location, value, source, and saved state.
+- Provides a calendar-first view for deadlines, launch windows, and upcoming events.
+- Supports guest browsing plus passwordless email sign-in/sign-up for saved opportunities and personalization.
+- Includes newsletter capture for founder opportunity updates.
+- Uses PostHog events for product analytics such as pageviews, searches, saves, category selection, and source clicks.
+- Includes sync scaffolding for TinyFish Search/Fetch, Supabase persistence, review queues, and scheduled refreshes.
+- Ships with Open Graph metadata, favicon, and a generated link-preview image for polished sharing.
+
+## Tech Stack
+
+- Next.js 15 App Router
+- React 18 + TypeScript
 - Tailwind CSS
-- Zustand
-- Supabase SSR helpers and SQL migration scaffolding
-- TinyFish browser automation client
-- Resend client
-- Google Calendar client
-- Netlify deployment config
+- Zustand for workspace state
+- Supabase SSR/Auth helpers and SQL migration scaffolding
+- TinyFish Search/Fetch integration points
+- Resend for email/newsletter workflows
+- PostHog for analytics
+- Netlify deployment with `@netlify/plugin-nextjs`
+- GitHub Actions cron hook for opportunity sync
 
-## Key routes
-
-- `/`
-- `/login`
-- `/signup`
-- `/step-1`
-- `/step-2`
-- `/step-3`
-- `/complete`
-- `/dashboard`
-- `/calendar`
-- `/inbox`
-- `/data`
-- `/profile`
-- `/permissions`
-
-## API surface
-
-- `POST /api/agent/run`
-- `GET /api/agent/status`
-- `POST /api/agent/stop`
-- `GET/POST /api/institutions`
-- `GET/PATCH /api/institutions/[id]`
-- `GET/POST /api/outreach`
-- `GET/PATCH /api/outreach/[id]`
-- `POST /api/outreach/[id]/approve`
-- `POST /api/outreach/[id]/send`
-- `GET/POST /api/bookings`
-- `POST /api/webhooks/tinyfish`
-
-## Local development
+## Quick Start
 
 ```bash
 npm install
+cp .env.example .env.local
 npm run dev
 ```
 
-Create a local `.env.local` from `.env.example` before enabling live providers.
+Open [http://localhost:3000](http://localhost:3000).
 
-## Environment variables
+The app can run locally with seeded opportunity data while provider keys are empty. Add environment variables when you want live auth, sync, email, persistence, analytics, or logo enrichment.
 
-See `.env.example` for the full set. The most important server-side keys are:
+## Environment Variables
 
-- `TINYFISH_API_KEY`
-- `TINYFISH_WEBHOOK_SECRET`
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `RESEND_API_KEY`
-- `GOOGLE_CLIENT_ID`
-- `GOOGLE_CLIENT_SECRET`
-- `GOOGLE_REDIRECT_URI`
-- `CALCOM_API_KEY`
+All real values should live in `.env.local` for local development and in your hosting/provider dashboards for production. `.env.local` is intentionally ignored by git.
 
-## Database
+```bash
+# TinyFish discovery and fetch
+TINYFISH_API_KEY=
+TINYFISH_BASE_URL=https://agent.tinyfish.ai/v1
+TINYFISH_SEARCH_URL=https://api.search.tinyfish.ai
+TINYFISH_FETCH_URL=https://api.fetch.tinyfish.ai
+TINYFISH_WEBHOOK_SECRET=
 
-The initial Supabase schema lives at:
+# Supabase auth and persistence
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-- `supabase/migrations/001_initial.sql`
+# Scheduled sync
+CRON_SECRET=
+FOUNDERREACH_BASE_URL=
+NEXT_PUBLIC_SITE_URL=https://founderreach.app
+
+# Email and newsletter
+RESEND_API_KEY=
+NEWSLETTER_FROM_EMAIL=FounderReach <updates@founderreach.app>
+NEWSLETTER_NOTIFY_EMAIL=
+
+# Logos and analytics
+NEXT_PUBLIC_LOGO_DEV_TOKEN=
+NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN=
+NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+```
+
+`NEXT_PUBLIC_*` variables are browser-visible by design. Do not put private secrets in them.
+
+## Core Routes
+
+- `/` - product landing page
+- `/dashboard` - searchable opportunity radar
+- `/calendar` - deadline and event calendar
+- `/profile` - guest/email workspace settings, saved stack, newsletter
+- `/data` - source and sync surface
+- `/login` and `/signup` - passwordless email access
+
+## API Surface
+
+- `GET /api/opportunities` - list current opportunity graph
+- `POST /api/opportunities/sync` - trigger opportunity sync
+- `GET /api/opportunities/hacklist` - import Hacklist-style source data
+- `GET /api/cron/opportunity-sync` - protected scheduled refresh endpoint
+- `GET/POST /api/me/saved-opportunities` - saved opportunity personalization
+- `GET/POST /api/me/calendar-preferences` - user calendar preferences
+- `POST /api/newsletter` - newsletter signup
+- `POST /api/webhooks/tinyfish` - TinyFish webhook receiver
+
+## Data Model
+
+The Supabase migration lives in:
+
+```bash
+supabase/migrations/002_opportunity_graph.sql
+```
+
+It includes tables for opportunities, saved opportunities, newsletter subscribers, sync runs, sync candidates, and calendar preferences.
+
+## Scripts
+
+```bash
+npm run dev      # Start local development
+npm run build    # Build production bundle
+npm run start    # Run production build locally
+npm run lint     # Run ESLint
+```
 
 ## Deployment
 
-This repository is intended for Netlify only. The project includes:
+The project is configured for Netlify:
 
-- `netlify.toml`
-- `@netlify/plugin-nextjs`
+- Build command: `npm run build`
+- Publish directory: `.next`
+- Plugin: `@netlify/plugin-nextjs`
 
-The new repo should be linked to Netlify and deployed to `founderreach.app` after environment variables are set and the fresh secrets are rotated.
+Set the production environment variables in Netlify before enabling live sync, Supabase writes, email, analytics, and cron.
+
+## Repository Safety
+
+- Real secrets are not committed.
+- `.env.local` is gitignored.
+- `.env.example` contains placeholders only.
+- Public browser keys use the `NEXT_PUBLIC_*` prefix intentionally.
+- The repo includes `SECURITY.md` for responsible reporting guidance.
+
+## License
+
+MIT License. See [LICENSE](LICENSE).

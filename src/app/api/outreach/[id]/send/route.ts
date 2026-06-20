@@ -2,11 +2,16 @@ import { NextResponse } from "next/server";
 import { demoContacts, demoOutreach, demoProfile } from "@/lib/demo-data";
 import { sendOutreachEmail } from "@/lib/resend/client";
 
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
+
 export async function POST(
   _request: Request,
-  { params }: { params: { id: string } },
+  context: RouteContext,
 ) {
-  const outreach = demoOutreach.find((item) => item.id === params.id);
+  const { id } = await context.params;
+  const outreach = demoOutreach.find((item) => item.id === id);
 
   if (!outreach) {
     return NextResponse.json({ error: "Outreach not found." }, { status: 404 });

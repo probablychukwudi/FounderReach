@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   const redirectTo = next?.startsWith("/") ? next : "/dashboard";
 
   if (code) {
-    const supabase = getSupabaseServerClient();
+    const supabase = await getSupabaseServerClient();
     await supabase?.auth.exchangeCodeForSession(code);
   }
 
