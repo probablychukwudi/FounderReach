@@ -1,36 +1,49 @@
 import Image from "next/image";
 import Link from "next/link";
-import { PipelineCard } from "@/components/pipeline/pipeline-card";
-import { agentBlueprints } from "@/lib/demo-data";
+import { CalendarDays, Database, Rocket, Sparkles } from "lucide-react";
+import { opportunityStats } from "@/lib/opportunities";
 
 export default function CompletePage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white px-6 py-12">
-      <div className="w-full max-w-[1040px] text-center">
+    <main className="flex min-h-screen items-center justify-center bg-[#2e2e2b] px-6 py-12 text-[#f7f4eb]">
+      <div className="w-full max-w-[860px]">
         <div className="mx-auto flex w-fit items-center gap-2">
           <Image src="/assets/brand/founderreach-logo-mark.svg" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
-          <div className="text-[20px] font-black tracking-[-0.05em] text-ink">FounderReach</div>
+          <div className="text-[20px] font-semibold tracking-normal">FounderReach</div>
         </div>
 
-        <div className="mt-6 rounded-[16px] border border-[#ededed] bg-white px-6 py-8 shadow-[0px_20px_60px_rgba(26,28,28,0.08)]">
-          <h1 className="font-display text-[64px] font-black leading-[0.95] tracking-[-0.06em] text-ink">Meet Your Agents</h1>
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            {agentBlueprints.map((agent) => (
-              <PipelineCard key={agent.id} agent={{ ...agent, status: "complete", countLabel: "312 institutions scanned" }} compact />
-            ))}
+        <section className="mt-6 rounded-[16px] border border-white/[0.08] bg-[#262625] px-6 py-8 text-center">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-[12px] bg-[#0b6b3a]">
+            <Sparkles className="h-5 w-5" />
           </div>
-        </div>
+          <h1 className="mt-6 text-[42px] font-semibold leading-tight tracking-normal">Your founder graph is ready.</h1>
+          <p className="mx-auto mt-4 max-w-[560px] text-[16px] leading-7 text-[#ceccc5]">
+            Start with active hackathons, accelerators, funding, conferences, launch channels, talent, mentors, and trusted source notes.
+          </p>
 
-        <h2 className="mt-10 font-display text-[64px] font-black leading-[0.95] tracking-[-0.06em] text-ink">You&apos;re all set, Alex!</h2>
-        <p className="mx-auto mt-4 max-w-[420px] text-[18px] leading-8 text-ink-2">
-          Your agents are configured and ready to start scouting data sources.
-        </p>
-        <Link
-          href="/dashboard"
-          className="mt-8 inline-flex rounded-[8px] bg-[linear-gradient(166deg,#0b8f48_0%,#4ade80_100%)] px-8 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white"
-        >
-          Enter Dashboard →
-        </Link>
+          <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            {[
+              [Database, opportunityStats.activeItems.toString(), "Resources tracked"],
+              [Rocket, opportunityStats.hacklistActiveCount.toString(), "Active hackathons"],
+              [CalendarDays, "Jun 20", "Last refreshed"],
+            ].map(([Icon, value, label]) => {
+              const LucideIcon = Icon as typeof Database;
+              return (
+                <div key={String(label)} className="rounded-[12px] border border-white/[0.07] bg-[#2b2b28] px-4 py-4">
+                  <LucideIcon className="mx-auto h-4 w-4 text-[#4ade80]" />
+                  <div className="mt-3 text-[22px] font-semibold">{String(value)}</div>
+                  <div className="mt-1 text-[12px] text-[#bfbfba]">{String(label)}</div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <div className="mt-8 text-center">
+          <Link href="/dashboard" className="inline-flex rounded-[8px] bg-[#f7f4eb] px-6 py-3 text-[14px] font-medium text-[#191919]">
+            Enter command center
+          </Link>
+        </div>
       </div>
     </main>
   );

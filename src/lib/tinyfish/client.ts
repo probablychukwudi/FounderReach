@@ -2,6 +2,10 @@ import type { AgentStage, Source } from "@/types";
 
 const TINYFISH_BASE_URL =
   process.env.TINYFISH_BASE_URL ?? "https://agent.tinyfish.ai/v1";
+const TINYFISH_SEARCH_URL =
+  process.env.TINYFISH_SEARCH_URL ?? "https://api.search.tinyfish.ai";
+const TINYFISH_FETCH_URL =
+  process.env.TINYFISH_FETCH_URL ?? "https://api.fetch.tinyfish.ai";
 
 type TinyFishEvent = {
   event?: string;
@@ -17,6 +21,36 @@ export interface TinyFishAutomationResult {
   events: TinyFishEvent[];
   finalData?: unknown;
   rawText: string;
+}
+
+export interface TinyFishSearchResult {
+  position: number;
+  site_name?: string;
+  title: string;
+  snippet?: string;
+  url: string;
+}
+
+export interface TinyFishSearchResponse {
+  query: string;
+  results: TinyFishSearchResult[];
+  total_results?: number;
+  page?: number;
+}
+
+export interface TinyFishFetchResult {
+  url: string;
+  final_url?: string;
+  title?: string;
+  description?: string;
+  language?: string;
+  format?: string;
+  text?: unknown;
+}
+
+export interface TinyFishFetchResponse {
+  results: TinyFishFetchResult[];
+  errors?: Array<{ url: string; error: string }>;
 }
 
 function safeJsonParse(value: string) {
@@ -92,6 +126,77 @@ export async function runTinyFishAutomation(input: TinyFishAutomationInput) {
   }
 
   return parseSseResponse(response);
+}
+
+function getTinyFishApiKey() {
+  const apiKey = process.env.TINYFISH_API_KEY;
+
+  if (!apiKey) {
+    throw new Error("Missing TINYFISH_API_KEY.");
+  }
+
+  return apiKey;
+}
+
+export async function searchTinyFish({
+  query,
+  location,
+  language = "en",
+  page,
+}: {
+  query: string;
+  location?: string;
+  language?: string;
+  page?: number;
+}) {
+  const url = new URL(TINYFISH_SEARCH_URL);
+  url.searchParams.set("query", query);
+  if (location) url.searchParams.set("location", location);
+  if (language) url.searchParams.set("language", language);
+  if (typeof page === "number") url.searchParams.set("page", page.toString());
+
+  const response = await fetch(url, {
+    headers: {
+      "X-API-Key": getTinyFishApiKey(),
+    },
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`TinyFish search failed with status ${response.status}.`);
+  }
+
+  return (await response.json()) as TinyFishSearchResponse;
+}
+
+export async function fetchTinyFishUrls({
+  urls,
+  format = "markdown",
+  ttl = 0,
+}: {
+  urls: string[];
+  format?: "html" | "markdown" | "json";
+  ttl?: number;
+}) {
+  const response = await fetch(TINYFISH_FETCH_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-Key": getTinyFishApiKey(),
+    },
+    body: JSON.stringify({
+      urls: urls.slice(0, 10),
+      format,
+      ttl,
+    }),
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(`TinyFish fetch failed with status ${response.status}.`);
+  }
+
+  return (await response.json()) as TinyFishFetchResponse;
 }
 
 export function buildTinyFishGoal({

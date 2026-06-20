@@ -1,0 +1,21 @@
+name: Opportunity sync
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call FounderReach cron endpoint
+        env:
+          FOUNDERREACH_BASE_URL: ${{ secrets.FOUNDERREACH_BASE_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          test -n "$FOUNDERREACH_BASE_URL"
+          test -n "$CRON_SECRET"
+          curl --fail --show-error --silent \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            "$FOUNDERREACH_BASE_URL/api/cron/opportunity-sync?limit=2&fetch=false&publish=true"

@@ -23,7 +23,7 @@ export function FounderReachLogo({
         priority
       />
       {!iconOnly && (
-        <div className={cn("font-display font-black leading-none tracking-[-0.05em] text-ink", compact ? "text-[20px]" : "text-[24px]", wordmarkClassName)}>
+        <div className={cn("font-display font-semibold leading-none tracking-normal text-ink", compact ? "text-[20px]" : "text-[24px]", wordmarkClassName)}>
           FounderReach
         </div>
       )}

@@ -1,34 +1,21 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { EmailAccessForm } from "@/components/auth/email-access-form";
+import { NewsletterSignup } from "@/components/auth/newsletter-signup";
 import { AuthFooterLink, AuthShell } from "@/components/forms/auth-shell";
-import { Field, TextInput } from "@/components/forms/field";
-import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
-  const router = useRouter();
-
   return (
     <AuthShell
       title="Log in to FounderReach"
-      description="Sign in to your workspace to continue running live founder partnership research, approvals, and meeting workflows."
+      description="Use your email to open a saved workspace with your calendar, saved opportunities, alerts, and founder preferences."
       footer={<AuthFooterLink prompt="Need an account?" cta="Create one" href="/signup" />}
     >
-      <form
-        className="space-y-5"
-        onSubmit={(event) => {
-          event.preventDefault();
-          router.push("/dashboard");
-        }}
-      >
-        <Field label="Work Email">
-          <TextInput type="email" placeholder="you@startup.com" required />
-        </Field>
-        <Field label="Password">
-          <TextInput type="password" placeholder="••••••••" required />
-        </Field>
-        <Button className="w-full">Continue</Button>
-      </form>
+      <div className="space-y-4">
+        <Suspense fallback={<div className="h-44 rounded-[10px] bg-[#fbfbf8]" />}>
+          <EmailAccessForm intent="login" />
+        </Suspense>
+        <NewsletterSignup />
+      </div>
     </AuthShell>
   );
 }

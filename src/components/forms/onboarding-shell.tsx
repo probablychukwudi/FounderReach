@@ -39,7 +39,7 @@ export function OnboardingShell({
         </div>
         <div className="mt-8">
           <div className="eyebrow">Set Up Your Workspace</div>
-          <h1 className="mt-3 text-[40px] font-black text-ink">{title}</h1>
+          <h1 className="mt-3 text-[40px] font-semibold text-ink">{title}</h1>
           <p className="mt-4 text-base leading-7 text-ink-2">{description}</p>
         </div>
         <div className="mt-8">{children}</div>

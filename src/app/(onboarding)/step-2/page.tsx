@@ -36,14 +36,14 @@ export default function StepTwoPage() {
       <div className="w-full max-w-[472px] rounded-[12px] bg-white px-8 py-8 shadow-[0px_20px_60px_rgba(26,28,28,0.08)]">
         <div className="mx-auto flex w-fit items-center gap-2">
           <Image src="/assets/brand/founderreach-logo-mark.svg" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
-          <div className="text-[20px] font-black tracking-[-0.05em] text-ink">FounderReach</div>
+          <div className="text-[20px] font-semibold tracking-normal text-ink">FounderReach</div>
         </div>
 
         <div className="mt-8">
           <StepProgress />
         </div>
 
-        <h1 className="mt-10 text-center text-[42px] font-bold tracking-[-0.04em] text-ink">Startup Details</h1>
+        <h1 className="mt-10 text-center text-[42px] font-bold tracking-normal text-ink">Startup Details</h1>
         <p className="mt-3 text-center text-base text-ink-2">Tell us a bit more about what you&apos;re building.</p>
 
         <form

@@ -91,7 +91,7 @@ export function LandingDemoTrigger({
         type="button"
         onClick={() => setOpen(true)}
         className={cn(
-          "inline-flex items-center gap-2 rounded-[8px] border border-[#d7dbd8] bg-white px-5 py-2.5 text-base font-medium tracking-[-0.025em] text-ink transition hover:border-[#bccabb] hover:bg-[#f7f7f7]",
+          "inline-flex items-center gap-2 rounded-[8px] border border-[#d7dbd8] bg-white px-5 py-2.5 text-base font-medium tracking-normal text-ink transition hover:border-[#bccabb] hover:bg-[#f7f7f7]",
           className,
         )}
       >

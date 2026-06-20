@@ -30,7 +30,7 @@ export default function StepOnePage() {
       <div className="w-full max-w-[420px] text-center">
         <div className="mx-auto flex w-fit items-center gap-2">
           <Image src="/assets/brand/founderreach-logo-mark.svg" alt="FounderReach" width={28} height={31} className="h-auto w-7" />
-          <div className="text-[20px] font-black tracking-[-0.05em] text-ink">FounderReach</div>
+          <div className="text-[20px] font-semibold tracking-normal text-ink">FounderReach</div>
         </div>
         <div className="mt-3 text-base text-ink-2">Set up your workspace</div>
 
@@ -38,7 +38,7 @@ export default function StepOnePage() {
           <OnboardingStepper labels={["Account", "Startup", "Sources", "Ready"]} active={0} />
         </div>
 
-        <h1 className="mt-10 text-[42px] font-bold tracking-[-0.04em] text-ink">Create your account</h1>
+        <h1 className="mt-10 text-[42px] font-bold tracking-normal text-ink">Create your account</h1>
         <p className="mt-3 text-base text-ink-2">Join FounderReach to accelerate your outreach.</p>
 
         <form

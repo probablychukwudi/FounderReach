@@ -25,7 +25,7 @@ export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
     <input
       {...props}
       className={cn(
-        "h-12 w-full rounded-[18px] border border-black/8 bg-white px-4 font-body text-sm text-ink outline-none transition focus:border-green/30 focus:ring-4 focus:ring-green/10",
+        "h-12 w-full rounded-[18px] border border-black/8 bg-white px-4 font-body text-[16px] text-ink outline-none transition focus:border-green/30 focus:ring-4 focus:ring-green/10 sm:text-sm",
         props.className,
       )}
     />
@@ -37,7 +37,7 @@ export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement
     <textarea
       {...props}
       className={cn(
-        "min-h-[120px] w-full rounded-[18px] border border-black/8 bg-white px-4 py-3 font-body text-sm text-ink outline-none transition focus:border-green/30 focus:ring-4 focus:ring-green/10",
+        "min-h-[120px] w-full rounded-[18px] border border-black/8 bg-white px-4 py-3 font-body text-[16px] text-ink outline-none transition focus:border-green/30 focus:ring-4 focus:ring-green/10 sm:text-sm",
         props.className,
       )}
     />

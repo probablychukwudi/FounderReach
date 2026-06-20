@@ -41,7 +41,7 @@ export default function StepThreePage() {
           ))}
         </div>
 
-        <h1 className="mt-8 text-[42px] font-bold tracking-[-0.04em] text-ink">Connect Sources</h1>
+        <h1 className="mt-8 text-[42px] font-bold tracking-normal text-ink">Connect Sources</h1>
         <p className="mt-3 text-base text-ink-2">Select the platforms you want FounderReach to monitor for startup intelligence.</p>
 
         <div className="relative mt-6">

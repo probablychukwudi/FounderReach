@@ -37,7 +37,7 @@ a {
   h3,
   h4 {
     font-family: var(--font-inter), sans-serif;
-    letter-spacing: -0.03em;
+    letter-spacing: 0;
   }
 
   p {

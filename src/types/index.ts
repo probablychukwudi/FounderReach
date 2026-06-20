@@ -37,6 +37,15 @@ export interface Profile {
   startupStage: StartupStage;
 }
 
+export type FounderAccountMode = "guest" | "email";
+
+export interface FounderAccount {
+  mode: FounderAccountMode;
+  email?: string;
+  newsletterOptIn: boolean;
+  createdAt: string;
+}
+
 export interface Source {
   id: string;
   platform: SourcePlatform;
@@ -137,4 +146,93 @@ export interface PermissionToggle {
   label: string;
   description: string;
   enabled: boolean;
+}
+
+export type OpportunityCategory =
+  | "hackathon"
+  | "accelerator"
+  | "conference"
+  | "funding"
+  | "incentive"
+  | "investor"
+  | "mentor"
+  | "talent"
+  | "launch"
+  | "news"
+  | "forum"
+  | "fellowship"
+  | "competition";
+
+export type OpportunityFormat =
+  | "Online"
+  | "In-person"
+  | "Hybrid"
+  | "Remote"
+  | "Global"
+  | "Directory";
+
+export type OpportunityCost =
+  | "Free"
+  | "Paid"
+  | "Equity"
+  | "Non-dilutive"
+  | "Dilutive"
+  | "Credits"
+  | "Community";
+
+export interface Opportunity {
+  id: string;
+  title: string;
+  organization: string;
+  organizationDomain?: string;
+  logoUrl?: string;
+  category: OpportunityCategory;
+  format: OpportunityFormat;
+  location: string;
+  sectors: string[];
+  audience: string;
+  summary: string;
+  deadline?: string;
+  startDate?: string;
+  endDate?: string;
+  value?: string;
+  cost: OpportunityCost;
+  sourceName: string;
+  sourceUrl: string;
+  actionLabel: string;
+  tags: string[];
+  trustSignal: string;
+  priority: "urgent" | "soon" | "evergreen" | "watch";
+  featured?: boolean;
+}
+
+export interface OpportunityCategoryMeta {
+  id: OpportunityCategory | "all";
+  label: string;
+  description: string;
+}
+
+export interface OpportunitySyncCandidate {
+  id: string;
+  title: string;
+  organization: string;
+  organizationDomain?: string;
+  logoUrl?: string;
+  category: OpportunityCategory;
+  format: OpportunityFormat;
+  location: string;
+  summary: string;
+  sourceName: string;
+  sourceUrl: string;
+  discoveredBy: string;
+  fetchedTitle?: string;
+  fetchedDescription?: string;
+  confidence: number;
+}
+
+export interface CalendarPreferences {
+  timezone: string;
+  defaultView: "month" | "week" | "list";
+  digestFrequency: "off" | "daily" | "weekly";
+  savedDeadlineWindowDays: number;
 }
