@@ -63,7 +63,12 @@ const primaryCategories: NavCategory[] = [
 
 const secondaryCategories: NavCategory[] = ["incentive", "funding", "fellowship", "news"];
 
-function CategoryLink({ categoryId }: { categoryId: NavCategory }) {
+type SidebarLeftProps = {
+  className?: string;
+  onNavigate?: () => void;
+};
+
+function CategoryLink({ categoryId, onNavigate }: { categoryId: NavCategory; onNavigate?: () => void }) {
   const opportunities = useAppStore((state) => state.opportunities);
   const selectedCategory = useAppStore((state) => state.selectedCategory);
   const setSelectedCategory = useAppStore((state) => state.setSelectedCategory);
@@ -82,6 +87,7 @@ function CategoryLink({ categoryId }: { categoryId: NavCategory }) {
       href="/dashboard"
       onClick={() => {
         setSelectedCategory(categoryId);
+        onNavigate?.();
         captureFounderEvent("opportunity_category_selected", {
           category: categoryId,
           category_count: count,
@@ -94,7 +100,7 @@ function CategoryLink({ categoryId }: { categoryId: NavCategory }) {
           : "text-ink-2 hover:bg-white/65 hover:text-ink",
       )}
     >
-      <Icon className={cn("h-4 w-4 shrink-0", active ? "text-green" : "text-ink-3")} />
+      <Icon aria-hidden="true" className={cn("h-4 w-4 shrink-0", active ? "text-green" : "text-ink-3")} />
       <span className="min-w-0 flex-1 truncate">{category.label}</span>
       <span
         className={cn(
@@ -108,7 +114,7 @@ function CategoryLink({ categoryId }: { categoryId: NavCategory }) {
   );
 }
 
-export function SidebarLeft() {
+export function SidebarLeft({ className, onNavigate }: SidebarLeftProps) {
   const pathname = usePathname();
   const opportunities = useAppStore((state) => state.opportunities);
   const selectedOpportunityId = useAppStore((state) => state.selectedOpportunityId);
@@ -122,25 +128,26 @@ export function SidebarLeft() {
     .slice(0, 6);
 
   return (
-    <aside className="border-r border-[#dadada] bg-surface xl:h-screen xl:overflow-hidden">
+    <aside className={cn("border-r border-[#dadada] bg-surface xl:h-screen xl:overflow-hidden", className)}>
       <div className="flex h-full min-h-0 flex-col px-3 py-5">
         <div className="flex h-7 shrink-0 items-center justify-between px-1">
-          <Link href="/dashboard" aria-label="Go to FounderReach dashboard">
+          <Link href="/dashboard" aria-label="Go to FounderReach dashboard" onClick={onNavigate}>
             <FounderReachLogo compact wordmarkClassName="font-semibold tracking-normal text-ink" />
           </Link>
           <Link
             href="/dashboard"
+            onClick={onNavigate}
             className="flex h-6 w-6 items-center justify-center rounded-[8px] text-ink-3 transition hover:bg-white hover:text-ink"
             aria-label="Search opportunities"
           >
-            <Search className="h-4 w-4" />
+            <Search aria-hidden="true" className="h-4 w-4" />
           </Link>
         </div>
 
         <div className="scrollbar-none mt-7 min-h-0 flex-1 overflow-y-auto">
           <nav aria-label="FounderReach opportunity categories" className="space-y-0.5">
             {primaryCategories.map((categoryId) => (
-              <CategoryLink key={categoryId} categoryId={categoryId} />
+              <CategoryLink key={categoryId} categoryId={categoryId} onNavigate={onNavigate} />
             ))}
           </nav>
 
@@ -148,7 +155,7 @@ export function SidebarLeft() {
             <div className="px-1.5 text-[12px] font-medium text-ink">Capital and signals</div>
             <div className="mt-2 space-y-0.5">
               {secondaryCategories.map((categoryId) => (
-                <CategoryLink key={categoryId} categoryId={categoryId} />
+                <CategoryLink key={categoryId} categoryId={categoryId} onNavigate={onNavigate} />
               ))}
             </div>
           </section>
@@ -165,6 +172,7 @@ export function SidebarLeft() {
                   href="/dashboard"
                   onClick={() => {
                     setSelectedOpportunityId(item.id);
+                    onNavigate?.();
                     captureFounderEvent("saved_opportunity_opened", {
                       opportunity_id: item.id,
                       category: item.category,
@@ -176,7 +184,7 @@ export function SidebarLeft() {
                     selectedOpportunityId === item.id ? "bg-white text-ink" : "text-ink-2 hover:bg-white/65 hover:text-ink",
                   )}
                 >
-                  <Star className="h-3.5 w-3.5 shrink-0 text-green" />
+                  <Star aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-green" />
                   <span className="min-w-0 flex-1 truncate">{item.title}</span>
                 </Link>
               ))}
@@ -186,7 +194,7 @@ export function SidebarLeft() {
           <section className="mt-6">
             <div className="flex items-center justify-between px-1.5">
               <div className="text-[12px] font-medium text-ink">Closing soon</div>
-              <Link href="/calendar" className="text-[12px] text-green">
+              <Link href="/calendar" onClick={onNavigate} className="text-[12px] text-green">
                 Calendar
               </Link>
             </div>
@@ -199,6 +207,7 @@ export function SidebarLeft() {
                     href="/dashboard"
                     onClick={() => {
                       setSelectedOpportunityId(item.id);
+                      onNavigate?.();
                       captureFounderEvent("closing_soon_opportunity_opened", {
                         opportunity_id: item.id,
                         category: item.category,
@@ -210,7 +219,7 @@ export function SidebarLeft() {
                       selectedOpportunityId === item.id ? "bg-white text-ink" : "text-ink-2 hover:bg-white/65 hover:text-ink",
                     )}
                   >
-                    <Icon className="h-3.5 w-3.5 shrink-0 text-ink-3" />
+                    <Icon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-ink-3" />
                     <span className="min-w-0 flex-1 truncate">{item.title}</span>
                   </Link>
                 );
@@ -222,22 +231,24 @@ export function SidebarLeft() {
         <div className="mt-4 shrink-0 space-y-1 border-t border-black/5 pt-3">
           <Link
             href="/inbox"
+            onClick={onNavigate}
             className={cn(
               "flex h-8 items-center gap-1.5 rounded-[6px] px-1.5 text-[13px] transition",
               pathname.startsWith("/inbox") ? "bg-white text-ink" : "text-ink-2 hover:bg-white/65 hover:text-ink",
             )}
           >
-            <Bell className="h-4 w-4" />
+            <Bell aria-hidden="true" className="h-4 w-4" />
             Founder updates
           </Link>
           <Link
             href="/permissions"
+            onClick={onNavigate}
             className={cn(
               "flex h-8 items-center gap-1.5 rounded-[6px] px-1.5 text-[13px] transition",
               pathname.startsWith("/permissions") ? "bg-white text-ink" : "text-ink-2 hover:bg-white/65 hover:text-ink",
             )}
           >
-            <CircleHelp className="h-4 w-4" />
+            <CircleHelp aria-hidden="true" className="h-4 w-4" />
             Help & trust
           </Link>
           <div className="mt-3 overflow-hidden rounded-[10px] border border-black/5 bg-white">
@@ -251,9 +262,10 @@ export function SidebarLeft() {
             </div>
             <Link
               href={account?.mode === "email" ? "/profile" : "/signup"}
+              onClick={onNavigate}
               className="flex h-8 items-center justify-center gap-1.5 border-t border-black/5 text-[12px] font-medium text-green transition hover:bg-green-soft"
             >
-              <UserRound className="h-3.5 w-3.5" />
+              <UserRound aria-hidden="true" className="h-3.5 w-3.5" />
               {account?.mode === "email" ? "View profile" : "Create free account"}
             </Link>
           </div>
